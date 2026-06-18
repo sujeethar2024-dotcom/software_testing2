@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlobeTales - Around The World</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: 'Poppins', sans-serif;
+scroll-behavior:smooth;
+}
+
+body{
+background:#f2f2f2;
+transition:0.5s;
+}
+
+section{
+padding:80px 10%;
+}
+nav{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 10%;
+background:rgba(0,0,0,0.7);
+backdrop-filter:blur(10px);
+color:white;
+z-index:1000;
+}
+
+nav ul{
+display:flex;
+gap:20px;
+list-style:none;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+}
+
+.toggle{
+cursor:pointer;
+font-size:18px;
+}
+.hero{
+height:100vh;
+background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:white;
+position:relative;
+}
+
+.hero::after{
+content:'';
+position:absolute;
+inset:0;
+background:rgba(0,0,0,0.6);
+}
+
+.hero-content{
+position:relative;
+z-index:1;
+}
+
+.hero h1{
+font-size:60px;
+}
+
+.hero p{
+margin-top:20px;
+font-size:20px;
+}
+.stats{
+display:flex;
+justify-content:space-around;
+background:white;
+text-align:center;
+}
+
+.stat h2{
+color:#00b894;
+font-size:40px;
+}
+.destinations{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:30px;
+}
+
+.card{
+background:white;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+transition:0.4s;
+}
+
+.card img{
+width:100%;
+height:200px;
+object-fit:cover;
+}
+
+.card-content{
+padding:20px;
+}
+
+.card:hover{
+transform:translateY(-10px);
+}
+
+.parallax{
+height:400px;
+background:url('https://images.unsplash.com/photo-1526779259212-939e64788e3c?auto=format&fit=crop&w=1600&q=80') center/cover fixed;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+font-size:30px;
+}
+
+footer{
+background:#111;
+color:white;
+text-align:center;
+padding:20px;
+}
+.dark{
+background:#111;
+color:white;
+}
+
+.dark .card{
+background:#222;
+color:white;
+}
+
+.dark .stats{
+background:#1a1a1a;
+}
+@media(max-width:768px){
+.hero h1{font-size:35px;}
+.stats{flex-direction:column;gap:20px;}
+}
+nav a.active{
+    color:#00b894;
+    font-weight: bold;
+    border-bottom: 2px solid #00b894;
+}
+
+.card, .stat{
+opacity:0;
+transform:translateY(0);
+transition:0.6s;
+}
+
+.show{
+opacity:1;
+transform:translateY(0);
+}
+#topBtn{
+position:fixed;
+bottom:20px;
+right:20px;
+padding:10px;
+display:none;
+background:#00b894;
+color:white;
+border:none;
+border-radius:50%;
+cursor:pointer;
+}
+#progress{
+position:fixed;
+top:0;
+left:0;
+height:5px;
+background:#00b894;
+width:0%;
+z-index:2000;
+}
+
+</style>
+</head>
+<body>
+
+
+
+<script>
+    // 🌙 DARK MODE
+document.querySelector(".toggle").onclick = function () {
+    document.body.classList.toggle("dark");
+};
+
+// 🔢 COUNTER
+function animate(id, target) {
+    let count = 0;
+    let interval = setInterval(() => {
+        count++;
+        document.getElementById(id).innerText = count;
+        if (count == target) clearInterval(interval);
+    }, 40);
+}
+
+animate("count1", 6);
+animate("count2", 20);
+animate("count3", 50);
+
+
+// 🔍 SEARCH
+const searchInput = document.createElement("input");
+searchInput.placeholder = "Search destinations...";
+searchInput.style.cssText = "width:100%;padding:10px;margin-bottom:20px;";
+
+document.querySelector("#destinations")
+    .insertBefore(searchInput, document.querySelector(".destinations"));
+
+searchInput.addEventListener("keyup", function () {
+    let filter = searchInput.value.toLowerCase();
+    let cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+        let text = card.innerText.toLowerCase();
+        card.style.display = text.includes(filter) ? "block" : "none";
+    });
+});
+
+
+// 👍 LIKE + 💬 COMMENT FUNCTION (Reusable)
+function addFeaturesToCard(card) {
+    let content = card.querySelector(".card-content");
+
+    // LIKE
+    let likeBtn = document.createElement("button");
+    likeBtn.innerText = "❤️ Like";
+    let count = 0;
+
+    likeBtn.onclick = () => {
+        count++;
+        likeBtn.innerText = `❤️ ${count} Likes`;
+    };
+
+    content.appendChild(likeBtn);
+
+    // COMMENT
+    let input = document.createElement("input");
+    input.placeholder = "Write comment...";
+    input.style.display = "block";
+
+    let btn = document.createElement("button");
+    btn.innerText = "Post";
+
+    let list = document.createElement("ul");
+
+    btn.onclick = () => {
+        if (input.value.trim() !== "") {
+            let li = document.createElement("li");
+            li.innerText = input.value;
+            list.appendChild(li);
+            input.value = "";
+        }
+    };
+
+    content.appendChild(input);
+    content.appendChild(btn);
+    content.appendChild(list);
+}
+
+
+// Apply to existing cards
+document.querySelectorAll(".card").forEach(addFeaturesToCard);
+
+
+// ➕ ADD NEW DESTINATION
+const addBtn = document.createElement("button");
+addBtn.innerText = "➕ Add New Destination";
+addBtn.style.cssText = "margin:20px;padding:10px;";
+
+document.querySelector("#destinations").appendChild(addBtn);
+
+addBtn.onclick = () => {
+    let title = prompt("Enter destination name:");
+    let desc = prompt("Enter description:");
+    let img = prompt("Enter image URL:");
+
+    if (title && desc && img) {
+        let newCard = document.createElement("div");
+        newCard.classList.add("card");
+
+        newCard.innerHTML = `
+            <img src="${img}">
+            <div class="card-content">
+                <h3>${title}</h3>
+                <p>${desc}</p>
+            </div>
+        `;
+
+        document.querySelector(".destinations").appendChild(newCard);
+
+        // IMPORTANT: Add features to new card
+        addFeaturesToCard(newCard);
+    }
+};
+
+
+// 🔝 SCROLL TO TOP
+document.getElementById("topBtn").onclick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+};
+</Script>
+</html>

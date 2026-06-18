@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Explorer</title>
+
+<style>
+
+/* ===== GLOBAL ===== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#f4f7f6;
+    transition:0.4s;
+}
+
+/* ===== NAVIGATION ===== */
+nav{
+    position:fixed;
+    top:0;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 40px;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(8px);
+    color:white;
+    z-index:1000;
+}
+
+nav ul{
+    display:flex;
+    gap:20px;
+    list-style:none;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    font-weight:500;
+}
+
+nav a:hover{
+    color:#00c896;
+}
+
+.toggle{
+    cursor:pointer;
+    font-size:18px;
+}
+
+/* ===== HERO ===== */
+.hero{
+    height:100vh;
+    background:url('https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+    position:relative;
+}
+
+.hero::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+}
+
+.hero-content{
+    position:relative;
+    z-index:1;
+}
+
+.hero h1{
+    font-size:52px;
+}
+
+.hero p{
+    margin-top:15px;
+    font-size:18px;
+}
+
+/* ===== TIMELINE ===== */
+.timeline{
+    width:85%;
+    margin:120px auto;
+    position:relative;
+}
+
+.timeline::before{
+    content:'';
+    position:absolute;
+    width:4px;
+    background:#00c896;
+    top:0;
+    bottom:0;
+    left:50%;
+}
+
+/* ===== CARDS ===== */
+.card{
+    width:45%;
+    padding:20px;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:blur(12px);
+    margin:40px 0;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.15);
+    transition:0.4s ease;
+}
+
+.card img{
+    width:100%;
+    border-radius:10px;
+    margin:10px 0;
+}
+
+.card h3{
+    color:#008c6e;
+}
+
+.card:hover{
+    transform:translateY(-12px);
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+}
+
+.left{ margin-right:auto; }
+.right{ margin-left:auto; }
+
+/* ===== DARK MODE ===== */
+.dark{
+    background:#111;
+    color:white;
+}
+
+.dark nav{
+    background:rgba(0,0,0,0.95);
+}
+
+.dark .card{
+    background:rgba(40,40,40,0.85);
+    color:white;
+}
+
+.dark .card h3{
+    color:#00e0a8;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+    .timeline::before{ left:8px; }
+
+    .card{
+        width:90%;
+        margin-left:20px;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+    <h2>🌍 Travel Explorer</h2>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#journey">Journey</a></li>
+    </ul>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero" id="home">
+    <div class="hero-content">
+        <h1>Explore The World With Me</h1>
+        <p>Every journey tells a story ✈</p>
+    </div>
+</section>
+
+<!-- TIMELINE SECTION -->
+<section class="timeline" id="journey">
+
+    <div class="card left">
+        <h3>📍 Kerala</h3>
+        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80">
+        <p>God’s Own Country with beautiful backwaters and greenery.</p>
+    </div>
+
+    <div class="card right">
+        <h3>📍 Manali</h3>
+        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80">
+        <p>Snow mountains and breathtaking Himalayan views.</p>
+    </div>
+
+    <div class="card left">
+        <h3>📍 Coimbatore</h3>
+        <img src="https://source.unsplash.com/800x600/?coimbatore,india">
+        <p>A peaceful city surrounded by Western Ghats and spiritual vibes.</p>
+    </div>
+
+</section>
+
+</body>
+</html>

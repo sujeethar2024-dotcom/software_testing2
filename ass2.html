@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobeTales | Travel Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body { background: #f2f2f2; transition: 0.5s; }
+        section { padding: 80px 10%; }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 10%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            z-index: 1000;
+        }
+
+        nav ul { display: flex; gap: 20px; list-style: none; }
+        nav a { color: white; text-decoration: none; }
+        nav a.active { color: #00b894; border-bottom: 2px solid #00b894; }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        .stat h2 { color: #00b894; font-size: 2.5rem; }
+        .stat { opacity: 0; transform: translateY(20px); transition: 0.6s; }
+        .stat.show { opacity: 1; transform: translateY(0); }
+
+        /* Grid */
+        .destinations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: 0.6s;
+        }
+        .card.show { opacity: 1; transform: translateY(0); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-content { padding: 15px; }
+
+        /* Interaction Elements */
+        .like-btn { background: #ff7675; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px; }
+        .comment-input { width: 100%; padding: 8px; margin: 10px 0 5px; border: 1px solid #ddd; border-radius: 4px; }
+        .post-btn { background: #00b894; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; }
+        .comment-list { margin-top: 10px; font-size: 0.9rem; list-style: none; color: #555; }
+
+        /* Beautiful Footer with Background (Man Sitting/Traveler) */
+        footer {
+            text-align: center;
+            padding: 100px 20px;
+            /* Using a high-quality traveler image that matches the "Coastal/Nature" theme */
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1') center/cover;
+            color: white;
+            background-attachment: fixed; /* Parallax effect for beauty */
+        }
+
+        /* Controls */
+        .controls { margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+        #addBtn { padding: 10px 20px; background: #00b894; color: white; border: none; border-radius: 5px; cursor: pointer; }
+
+        /* UI elements */
+        #progress { position: fixed; top: 0; left: 0; height: 5px; background: #00b894; width: 0%; z-index: 2000; }
+        #topBtn { position: fixed; bottom: 20px; right: 20px; display: none; padding: 12px; background: #00b894; color: white; border: none; border-radius: 50%; cursor: pointer; }
+        .dark { background: #111; color: white; }
+        .dark .card, .dark .stats { background: #222; color: white; }
+        .toggle { cursor: pointer; font-size: 1.2rem; }
+
+        @media(max-width:768px){ .stats{flex-direction:column; gap:20px;} }
+    </style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+    <h2>🌍 GlobeTales</h2>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#destinations">Destinations</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <span class="toggle">🌙</span>
+</nav>
+
+<section id="home" class="hero">
+    <h1>Travel Across The Globe</h1>
+</section>
+
+<section class="stats" id="stats">
+    <div class="stat"><h2 id="count1">0</h2><p>Countries</p></div>
+    <div class="stat"><h2 id="count2">0</h2><p>Cities</p></div>
+    <div class="stat"><h2 id="count3">0</h2><p>Stories</p></div>
+</section>
+
+<section id="destinations">
+    <h2 style="margin-bottom:20px;">Destinations</h2>
+    
+    <div class="controls">
+        <button id="addBtn">➕ Add Destination</button>
+    </div>
+
+    <div class="destinations" id="destGrid">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1595815771614-ade9d652a65d">
+            <div class="card-content">
+                <h3>Coimbatore, India</h3>
+                <p>The Manchester of South India</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1593693397690-362cb9666fc2">
+            <div class="card-content">
+                <h3>Kerala, India</h3>
+                <p>Backwaters and nature beauty</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb">
+            <div class="card-content">
+                <h3>Bali, Indonesia</h3>
+                <p>Tropical paradise</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1526779259212-939e64788e3c">
+            <div class="card-content">
+                <h3>Seoul, South Korea</h3>
+                <p>Modern city with culture</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470">
+            <div class="card-content">
+                <h3>Switzerland</h3>
+                <p>Mountains and scenic beauty</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer id="contact">
+    <div style="background: rgba(0,0,0,0.5); display: inline-block; padding: 20px; border-radius: 10px;">
+        <h2>Join the Adventure</h2>
+        <p>Explore the world through the eyes of those who live for the journey.</p>
+        <br>
+        <p>© GlobeTales Travel Blog 2026</p>
+    </div>
+</footer>
+
+<button id="topBtn">⬆</button>
+
+<script>
+// DARK MODE
+document.querySelector(".toggle").onclick = () => {
+    document.body.classList.toggle("dark");
+};
+
+// COUNTER ANIMATION
+function animate(id, target) {
+    let c = 0;
+    let i = setInterval(() => {
+        c++;
+        document.getElementById(id).innerText = c;
+        if (c == target) clearInterval(i);
+    }, 40);
+}
+
+const observer = new IntersectionObserver((entries) => {
+    if(entries[0].isIntersecting) {
+        animate("count1", 6);
+        animate("count2", 20);
+        animate("count3", 50);
+        observer.disconnect();
+    }
+});
+observer.observe(document.querySelector("#stats"));
+
+// INTERACTION LOGIC
+function addFeatures(card) {
+    const container = card.querySelector(".card-content");
+    let likeBtn = document.createElement("button");
+    likeBtn.className = "like-btn";
+    let count = 0;
+    likeBtn.innerText = "❤️ Like";
+    likeBtn.onclick = () => likeBtn.innerText = `❤️ ${++count}`;
+
+    let inp = document.createElement("input");
+    inp.className = "comment-input";
+    inp.placeholder = "Comment...";
+    
+    let post = document.createElement("button");
+    post.className = "post-btn";
+    post.innerText = "Post";
+
+    let ul = document.createElement("ul");
+    ul.className = "comment-list";
+
+    post.onclick = () => {
+        if (inp.value.trim() != "") {
+            let li = document.createElement("li");
+            li.innerText = `• ${inp.value}`;
+            ul.appendChild(li);
+            inp.value = "";
+        }
+    };
+
+    container.appendChild(likeBtn);
+    container.appendChild(inp);
+    container.appendChild(post);
+    container.appendChild(ul);
+}
+
+document.querySelectorAll(".card").forEach(addFeatures);
+
+// ADD NEW DESTINATION LOGIC
+document.getElementById("addBtn").onclick = () => {
+    let t = prompt("Enter Title:");
+    let d = prompt("Enter Description:");
+    let img = prompt("Enter Image URL:", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
+
+    if(t && d && img) {
+        let card = document.createElement("div");
+        card.className = "card show";
+        card.innerHTML = `
+            <img src="${img}">
+            <div class="card-content">
+                <h3>${t}</h3>
+                <p>${d}</p>
+            </div>
+        `;
+        document.getElementById("destGrid").prepend(card);
+        addFeatures(card);
+    }
+};
+
+// SEARCH FUNCTION
+const search = document.createElement("input");
+search.placeholder = "Search destinations...";
+search.style.cssText = "padding:12px; width:100%; margin-bottom:20px; border-radius:5px; border:1px solid #ddd;";
+document.querySelector("#destinations").prepend(search);
+
+search.addEventListener("keyup", () => {
+    let filter = search.value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(filter) ? "block" : "none";
+    });
+});
+
+// SCROLL EFFECTS
+window.addEventListener("scroll", () => {
+    document.querySelectorAll(".card, .stat").forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+            el.classList.add("show");
+        }
+    });
+
+    document.getElementById("topBtn").style.display = window.scrollY > 300 ? "block" : "none";
+    let scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    document.getElementById("progress").style.width = scrolled + "%";
+});
+
+document.getElementById("topBtn").onclick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+};
+</script>
+</body>
+</html>
